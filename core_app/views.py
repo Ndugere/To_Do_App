@@ -35,7 +35,15 @@ def view_task(request, index):
     tasks = request.session.get("tasks", [])
     if 0<=index < len(tasks):
         task = tasks[index]
-        return render(request, "core_app/detail_page.html", {"task":task})
+        return render(request, "core_app/detail_page.html", {"task":task, "index": index})
     return HttpResponseRedirect(reverse("To_do_app:tasks_view"))
+
+
+def delete_task(request, index):
+    tasks = request.session.get("tasks", [])
+    if 0<=index<len(tasks):
+        del tasks[index]
+        request.session["tasks"] = tasks
+        return HttpResponseRedirect(reverse("To_do_app:tasks_view"))
 
 
