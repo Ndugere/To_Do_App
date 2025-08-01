@@ -47,3 +47,32 @@ def delete_task(request, index):
         return HttpResponseRedirect(reverse("To_do_app:tasks_view"))
 
 
+def update_task(request, index):
+    tasks = request.session.get("tasks", [])
+    if not (index >= 0 and index <len(tasks)):
+        return HttpResponseRedirect(reverse("To_do_app:tasks_view"))
+    
+    if request.method == "POST":
+        form = TaskForm(request.POST)
+
+        if form.is_valid():
+            new_task = form.cleaned_data["task"]
+            tasks[index] = new_task
+            request.session['tasks'] = tasks
+            return HttpResponseRedirect(reverse("To_do_app:tasks_view"))
+        
+        else:
+            form = form
+    
+    else:
+        current_task = tasks[index]
+        form = TaskForm(initial={"task":current_task})
+
+    return render(request, "core_app/update_task.html", {
+        "form":form,
+        "index": index
+        })
+
+
+
+
