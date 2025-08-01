@@ -4,12 +4,12 @@ from django.urls import reverse
 from .forms import TaskForm
 # Create your views here.
 
-all_tasks = ["far", "foo", "bars"]
+
 
 def tasks_view(request):
-
+    tasks = request.session.get("tasks", [])
     return render(request, "core_app/index.html", {
-        "all_tasks":all_tasks
+        "all_tasks":tasks
     })
 
 def add_a_task(request):
@@ -17,7 +17,9 @@ def add_a_task(request):
         form = TaskForm(request.POST)
         if form.is_valid():
             task = form.cleaned_data['task']
-            all_tasks.append(task)
+            tasks = request.session.get("tasks", [])
+            tasks.append(task)
+            request.session["tasks"] = tasks
             return HttpResponseRedirect(reverse("To_do_app:tasks_view"))
         else:
             return render(request, "core_app/add.html", {
