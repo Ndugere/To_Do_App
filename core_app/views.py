@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from .forms import TaskForm
 # Create your views here.
 
 all_tasks = ["far", "foo", "bars"]
@@ -13,8 +14,16 @@ def tasks_view(request):
 
 def add_a_task(request):
     if request.method == "POST":
-        task = request.POST.get("task")
-        if task:
+        form = TaskForm(request.POST)
+        if form.is_valid():
+            task = form.cleaned_data['task']
             all_tasks.append(task)
             return HttpResponseRedirect(reverse("To_do_app:tasks_view"))
-    return render(request, "core_app/add.html")
+        else:
+            return render(request, "core_app/add.html", {
+                "form": form
+            })
+    return render(request, "core_app/add.html",
+                  {
+                      "form" : TaskForm()
+                  })
