@@ -1,0 +1,11 @@
+{% extends "core_app/base.html" %}
+
+{% block body %}
+
+<h3>Task </h3>
+
+<p>{{task}}</p>
+
+<a href="{% url 'To_do_app:tasks_view'%}">Go back to viewing all tasks</a>
+
+{% endblock %}

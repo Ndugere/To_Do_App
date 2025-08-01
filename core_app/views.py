@@ -29,3 +29,13 @@ def add_a_task(request):
                   {
                       "form" : TaskForm()
                   })
+
+
+def view_task(request, index):
+    tasks = request.session.get("tasks", [])
+    if 0<=index < len(tasks):
+        task = tasks[index]
+        return render(request, "core_app/detail_page.html", {"task":task})
+    return HttpResponseRedirect(reverse("To_do_app:tasks_view"))
+
+

@@ -6,6 +6,9 @@
 <ul>
 {% for task in all_tasks %}
 <li> {{task }}</li>
+<br>
+<a href="{%url 'To_do_app:view_task' forloop.counter0 %}"> View Details</a>
+<br><br>
 {% empty %}
 <li> You have not added any Task</li>
 {% endfor %}
